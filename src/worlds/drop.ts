@@ -26,7 +26,7 @@ assertSorted("drop photos", TS.map((t) => ({ t })));
 const UI_SUCK = 12; // frames the last photo needs to fly into the window
 
 // each photo's own camera: a frame zoom on the face (push), a drift in px, a roll; every one moves, none stands
-const Z0 = [2.0, 1.9, 2.2, 1.8, 2.1, 2.0, 1.9, 2.2, 2.0, 1.8], DZ = [0.7, 0.9, 0.6, 0.8, 0.7, 0.9, 0.6, 0.8, 0.7, 0.9];
+const Z0 = [2.0, 1.9, 2.2, 1.8, 2.1, 2.0, 1.9, 2.2, 2.0, 1.8].map((z, i) => Math.min(4.2, Math.max(z, (1.15 * OV) / (2 * FOCUS[TEN[i]][1])))), DZ = [0.7, 0.9, 0.6, 0.8, 0.7, 0.9, 0.6, 0.8, 0.7, 0.9];
 const X0 = [-40, 50, -30, 40, -50, 30, -40, 50, -30, 40], VX = [90, -100, 80, -90, 100, -80, 90, -100, 80, -90];
 const Y0 = [30, -40, 20, -30, 40, -20, 30, -40, 20, -30], VY = [-60, 70, -50, 60, -70, 50, -60, 70, -50, 60];
 const R0 = [0.04, -0.05, 0.06, -0.04, 0.05, -0.06, 0.04, -0.05, 0.06, -0.04], VR = [-0.1, 0.12, -0.1, 0.1, -0.12, 0.1, -0.1, 0.12, -0.1, 0.1];
@@ -38,9 +38,9 @@ const photoCam = (i: number, t: number): { z: number; o: LayerO } => {
 const st = (dx: number, dy: number, z: number, roll = 0, ry = 0, rx = 0): St => ({ p: [dx, dy], s: [0, 0], z, roll, ry, rx });
 // the UI window's camera (the window is 1500 px wide): orbits, never stands
 const KU: CamKey[] = assertSorted("ui", [
-  { t: S.ui, st: st(0, 0, 0.85, 0.05, -0.45, 0.12), dz: 0.2, dr: -0.03 },
-  { t: S.ui2, st: st(-60, 40, 1.15, -0.08, 0.35, -0.1), dz: 0.25, dr: 0.03 },
-  { t: S.ui3, st: st(40, -30, 1.0, 0.1, -0.3, 0.15), dz: 0.3, dr: -0.04 },
+  { t: S.ui, st: st(0, 0, 0.9, 0.02, -0.15, 0.04), dz: 0.2, dr: -0.03 },
+  { t: S.ui2, st: st(-40, 30, 1.0, -0.03, 0.12, -0.04), dz: 0.25, dr: 0.03 },
+  { t: S.ui3, st: st(30, -20, 0.95, 0.03, -0.1, 0.05), dz: 0.3, dr: -0.04 },
   { t: S.flip, st: st(0, 0, 0.95, -0.04, 0, 0.05), dz: 0.3, dr: 0.02 },
 ]);
 
@@ -184,8 +184,8 @@ export function buildDrop(M: Media, SR: Record<Key, Src>): World {
   rig.add(bR.g, bG.g);
   bR.g.visible = bG.g.visible = true;
   bR.g.position.set(0, 0.12, 0);
-  bG.g.scale.setScalar(0.55);
-  bG.g.position.set(0, -0.12, 0);
+  bG.g.scale.setScalar(0.8);
+  bG.g.position.set(0, -0.2, 0);
   const back = mk(new THREE.PlaneGeometry(1.14, 0.62), new THREE.MeshBasicMaterial({ map: backTex(), side: THREE.FrontSide }));
   back.position.set(0, 0, -0.07);
   back.rotation.y = Math.PI;
@@ -217,9 +217,9 @@ export function buildDrop(M: Media, SR: Record<Key, Src>): World {
     const s = (total - gap) / (a.w + b.w);
     return { wa: a.w * s, wb: b.w * s, xa: 540 - total / 2 + (a.w * s) / 2, xb: 540 + total / 2 - (b.w * s) / 2 };
   };
-  const P1 = pair(wZ2, wKm, 540), P2 = pair(wZ3, wAt, 540);
+  const P1 = pair(wZ2, wKm, 640), P2 = pair(wZ3, wAt, 640);
   const hpx = (w: { w: number; h: number }, wpx: number) => (w.h * wpx) / w.w;
-  const WDS = 440, WZ = 360, WE = 500; // DESET, ŽÁDNÁ, NEEXISTUJE at rest (px)
+  const WDS = 594, WZ = 486, WE = 620; // DESET, ŽÁDNÁ, NEEXISTUJE at rest (px)
   const yZ = 1255 + hpx(wZ, WZ) / 2, yE = 1255 + hpx(wZ, WZ) + 38 + hpx(wE, WE) / 2;
   const LY = { cam: 1130, l1: 1300, lamp: 1460, l2: 1620 };
 
@@ -334,7 +334,7 @@ export function buildDrop(M: Media, SR: Record<Key, Src>): World {
       th.p.g.visible = ui && u >= 0 && u < 1;
       if (th.p.g.visible) {
         const e = inCubic(u);
-        place(th.p.g, base, lerp(th.x0, 540, e), lerp(th.y0, 640, e), lerp(360, 50, e), 1, D - 0.5, [0.3 * (1 - u), th.rot * e, th.rot * (1 - u)]);
+        place(th.p.g, base, lerp(th.x0, 540, e), lerp(th.y0, 560, e), lerp(360, 50, e), 1, D - 0.5, [0.3 * (1 - u), th.rot * e, th.rot * (1 - u)]);
       }
     });
     if (ui) {
@@ -342,7 +342,7 @@ export function buildDrop(M: Media, SR: Record<Key, Src>): World {
       const e = smooth((t - S.flip) / 0.45);
       const pop = lerp(0.6, 1, outBack(clamp((t - S.ui - sf(4)) / sf(10)), 1.3));
       rig.visible = t >= S.ui + sf(4);
-      place(rig, base, 540 + k.p[0] * 0.5, 640 + k.p[1], 1500 * k.z * pop, 1, D, [k.rx + 0.015 * Math.sin(t * 1.3), k.ry * (1 - e) + Math.PI * e + 0.03 * Math.sin(t * 1.7), k.roll]);
+      place(rig, base, 540 + k.p[0] * 0.5, 560 + k.p[1], 1000 * k.z * pop, 1, D, [k.rx + 0.015 * Math.sin(t * 1.3), k.ry * (1 - e) + Math.PI * e + 0.03 * Math.sin(t * 1.7), k.roll]);
       SR.res.set((t - (S.ui + sf(3))) * 30);
       SR.gen.set((t - (S.ui + 0.3)) * 30);
       bR.rim.opacity = 0.35 + 0.6 * pulse(t, S.ui2, 8) + 0.5 * pulse(t, S.flip, 8) * (t >= S.flip ? 1 : 0);
@@ -355,13 +355,13 @@ export function buildDrop(M: Media, SR: Record<Key, Src>): World {
       }
     } else burn.visible = false;
     // ── the words, in front of everything ──
-    showW(wD, base, t, S.deset, 7.22, 540, 1300, WDS, { from: 1.4, punch: [TS[3], TS[4]], seed: 0.6, d: D - 1.2 });
-    showW(wZ, base, t, S.zhad, 9.13, 540, yZ, WZ, { from: 1.3, punch: [S.neex2, TS[7], TS[8]], seed: 1.4, d: D - 1.2 });
-    showW(wE, base, t, S.neex2, 9.13, 540, yE, WE, { from: 1.3, punch: [TS[7], TS[8]], seed: 2.1, d: D - 1.2 });
-    showW(wZ2, base, t, S.zkam, 11.70, P1.xa, LY.l1, P1.wa, { from: 1.3, punch: [S.ui], seed: 0.3, d: D - 1.2 });
-    showW(wKm, base, t, S.kamera, 11.70, P1.xb, LY.l1, P1.wb, { from: 1.3, punch: [S.ui], seed: 1.0, d: D - 1.2 });
-    showW(wZ3, base, t, S.zate, 11.70, P2.xa, LY.l2, P2.wa, { from: 1.3, punch: [S.flip], seed: 1.7, d: D - 1.2 });
-    showW(wAt, base, t, S.atelier, 11.70, P2.xb, LY.l2, P2.wb, { from: 1.3, punch: [S.flip], seed: 2.5, d: D - 1.2 });
+    showW(wD, base, t, S.deset, 7.22, 540, 1300, WDS, { from: 1.08, punch: [TS[3], TS[4]], seed: 0.6, d: D - 1.2 });
+    showW(wZ, base, t, S.zhad, 9.13, 540, yZ, WZ, { from: 1.08, punch: [S.neex2, TS[7], TS[8]], seed: 1.4, d: D - 1.2 });
+    showW(wE, base, t, S.neex2, 9.13, 540, yE, WE, { from: 1.08, punch: [TS[7], TS[8]], seed: 2.1, d: D - 1.2 });
+    showW(wZ2, base, t, S.zkam, 11.70, P1.xa, LY.l1, P1.wa, { from: 1.08, punch: [S.ui], seed: 0.3, d: D - 1.2 });
+    showW(wKm, base, t, S.kamera, 11.70, P1.xb, LY.l1, P1.wb, { from: 1.08, punch: [S.ui], seed: 1.0, d: D - 1.2 });
+    showW(wZ3, base, t, S.zate, 11.70, P2.xa, LY.l2, P2.wa, { from: 1.08, punch: [S.flip], seed: 1.7, d: D - 1.2 });
+    showW(wAt, base, t, S.atelier, 11.70, P2.xb, LY.l2, P2.wb, { from: 1.08, punch: [S.flip], seed: 2.5, d: D - 1.2 });
     // the icons (appear with the first word of their line) and their lime X (slams after the word)
     for (const [ic, t0, tx, y] of [[icCam, S.zkam, S.kamera + 0.45, LY.cam], [icLamp, S.zate, S.atelier + 0.45, LY.lamp]] as [typeof icCam, number, number, number][]) {
       ic.g.visible = t >= t0 && t < 11.70;

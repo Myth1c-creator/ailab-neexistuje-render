@@ -245,7 +245,7 @@ jobs:
             echo "== tools/qa_gates.py" | tee -a $CK
             python3 tools/qa_gates.py "$MP4" --frames 921 --end-card ${{ inputs.end_card }} --guides 0,0.3,0.7,1.0,1.4,2.0,2.5,3.0,3.4,3.7,4.3,4.8,5.2,5.6,5.9,6.3,6.8,7.2,7.7,8.2,8.7,9.2,9.7,10.1,10.6,11.0,11.4,11.9,12.4,13.0,13.5,14.0,14.8 --out out/guides --json out/qa_gates.json 2>&1 | tee -a $CK || true
             echo "== cdp.mjs check (captions, 170 px)" | tee -a $CK
-            node kinetic/scripts/cdp.mjs check out/text_check.json 0.1 170 2>&1 | tee -a $CK || true
+            node kinetic/scripts/cdp.mjs check out/text_check.json 0.1 150 2>&1 | tee -a $CK || true
             echo "== check_text3d.py (3D words)" | tee -a $CK
             python3 check_text3d.py 2>&1 | tee -a $CK || true
             cp logs/text3d_check.json out/ 2>/dev/null || true

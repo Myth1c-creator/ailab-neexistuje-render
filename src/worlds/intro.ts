@@ -32,11 +32,11 @@ const KH: CamKey[] = assertSorted("hook", [
 ]);
 // the prompt panel's camera (the panel is 1700 px wide: offset, zoom, roll, yaw, pitch)
 const KP: CamKey[] = assertSorted("panel", [
-  { t: S.panel, st: st(0, 40, 0.95, 0.05, -0.45, 0.18), dz: 0.25, dr: -0.03 },
-  { t: S.p1, st: st(0, -40, 1.35, -0.09, 0.35, -0.1), dz: 0.2, dr: 0.04 },
-  { t: S.p2, st: st(0, 60, 1.1, 0.12, -0.5, 0.2), dz: 0.35, dr: -0.05 },
-  { t: S.p3, st: st(0, -20, 1.8, -0.05, 0.25, 0), dz: 0.3, dr: 0.03 },
-  { t: S.p4, st: st(0, 30, 1.25, 0.08, -0.3, 0.1), dz: 0.3, dr: -0.04 },
+  { t: S.panel, st: st(0, 40, 1.0, 0.02, -0.1, 0.04), dz: 0.25, dr: -0.03 },
+  { t: S.p1, st: st(0, -40, 1.25, -0.03, 0.08, -0.03), dz: 0.2, dr: 0.04 },
+  { t: S.p2, st: st(0, 60, 1.05, 0.03, -0.1, 0.05), dz: 0.35, dr: -0.05 },
+  { t: S.p3, st: st(0, -20, 1.4, -0.02, 0.06, 0), dz: 0.3, dr: 0.03 },
+  { t: S.p4, st: st(0, 30, 1.1, 0.03, -0.08, 0.03), dz: 0.3, dr: -0.04 },
 ]);
 
 const IMPS: Imp[] = [
@@ -185,7 +185,7 @@ export function buildIntro(M: Media, SR: Record<Key, Src>): World {
       return c;
     });
   };
-  const WH = [480, 480, 500], WN = [440, 500], WJ = [460, 500];
+  const WH = [620, 620, 620], WN = [594, 620], WJ = [600, 620];
   const yH = stack([wT, wH, wN], WH, 1180), yN = stack([wK, wV], WN, 1400), yJ = stack([wJ, wP], WJ, 1390);
   const bump8 = (t: number) => (t >= S.dis && t < S.dis + sf(8) ? Math.sin((Math.PI * (t - S.dis)) / sf(8)) : 0);
 
@@ -255,13 +255,13 @@ export function buildIntro(M: Media, SR: Record<Key, Src>): World {
     }
     // the words of the hook: TAHLE / HOLKA / NEEXISTUJE stacked low, in front of everything
     const hEnd = 1.7;
-    showW(wT, base, t, S.kter, hEnd, 540, yH[0], WH[0], { from: 1.3, punch: [S.cutB], seed: 0.4, d: D - 1.2 });
-    showW(wH, base, t, S.holka, hEnd, 540, yH[1], WH[1], { from: 1.3, punch: [S.cutB], seed: 1.1, d: D - 1.2 });
-    showW(wN, base, t, S.neex, hEnd, 540, yH[2], WH[2], { from: 1.3, punch: [S.dis, S.cutC], seed: 2.3, d: D - 1.2 });
-    showW(wK, base, t, S.nikdo, S.panel, 540, yN[0], WN[0], { from: 1.3, punch: [S.shatter], seed: 0.7, d: D - 1.2 });
-    showW(wV, base, t, S.nevyf, S.panel, 540, yN[1], WN[1], { from: 1.3, punch: [S.shatter], seed: 1.9, d: D - 1.2 });
-    showW(wJ, base, t, S.jeden, S.black, 540, yJ[0], WJ[0], { from: 1.3, punch: [S.p3], seed: 0.5, d: D - 1.2 });
-    showW(wP, base, t, S.prompt, S.black, 540, yJ[1], WJ[1], { from: 1.3, punch: [S.p4], seed: 2.2, d: D - 1.2 });
+    showW(wT, base, t, S.kter, hEnd, 540, yH[0], WH[0], { from: 1.08, punch: [S.cutB], seed: 0.4, d: D - 1.2 });
+    showW(wH, base, t, S.holka, hEnd, 540, yH[1], WH[1], { from: 1.08, punch: [S.cutB], seed: 1.1, d: D - 1.2 });
+    showW(wN, base, t, S.neex, hEnd, 540, yH[2], WH[2], { from: 1.08, punch: [S.dis, S.cutC], seed: 2.3, d: D - 1.2 });
+    showW(wK, base, t, S.nikdo, S.panel, 540, yN[0], WN[0], { from: 1.08, punch: [S.shatter], seed: 0.7, d: D - 1.2 });
+    showW(wV, base, t, S.nevyf, S.panel, 540, yN[1], WN[1], { from: 1.08, punch: [S.shatter], seed: 1.9, d: D - 1.2 });
+    showW(wJ, base, t, S.jeden, S.black, 540, yJ[0], WJ[0], { from: 1.08, punch: [S.p3], seed: 0.5, d: D - 1.2 });
+    showW(wP, base, t, S.prompt, S.black, 540, yJ[1], WJ[1], { from: 1.08, punch: [S.p4], seed: 2.2, d: D - 1.2 });
     {
       const on = (t >= S.kter && t < hEnd) || (t >= S.nikdo && t < S.panel) || (t >= S.jeden && t < S.black);
       plate.visible = on;
@@ -310,18 +310,18 @@ export function buildIntro(M: Media, SR: Record<Key, Src>): World {
       const enter = 1500 * (1 - smooth(whipU));
       const collapse = smooth((t - S.tape) / sf(16));
       const z = k.z;
-      place(board.g, base, 540 + enter + (850 - viewX) * z, 700 + k.p[1] * z, 1700 * z, 1, D, [k.rx + 0.015 * Math.sin(t * 1.3), k.ry + 0.03 * Math.sin(t * 1.7), k.roll]);
+      place(board.g, base, 540 + enter + (850 - viewX) * 0.68 * z, 760 + k.p[1] * z, 1150 * z, 1, D, [k.rx + 0.015 * Math.sin(t * 1.3), k.ry + 0.03 * Math.sin(t * 1.7), k.roll]);
       board.g.scale.y *= 1 - 0.985 * collapse;
       SR.typ.set(Math.floor(clamp(prog) * (BM.typ.n - 1)));
       board.faceMat.color.setScalar(1 - 0.5 * collapse);
-      board.rim.opacity = 0.5 + 0.5 * pulse(t, S.p1, 8) + 0.5 * collapse;
+      board.rim.opacity = 0.15 + 0.2 * pulse(t, S.p1, 8) + 0.5 * collapse;
       const lx = BM.typ.line;
       const cp = board.local(lerp(lx[0], lx[2], clamp(prog * 1.05)), (lx[1] + lx[3]) / 2, 0.01);
       cursor.position.copy(cp);
-      cursor.scale.setScalar(0.2 + 0.05 * Math.sin(t * 40));
+      cursor.scale.setScalar(0.08 + 0.02 * Math.sin(t * 40));
       lineBar.mesh.visible = collapse > 0.05;
       if (lineBar.mesh.visible) {
-        place(lineBar.mesh, base, 540, 700 + k.p[1] * z, 1100 * (1 - 0.3 * collapse), 1, D - 0.3);
+        place(lineBar.mesh, base, 540, 760 + k.p[1] * z, 1100 * (1 - 0.3 * collapse), 1, D - 0.3);
         lineBar.mat.opacity = 0.9 * collapse;
       }
     }

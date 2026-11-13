@@ -23,9 +23,9 @@ const D = 5;
 const C = { ramp1: S.dej, ctaPunch: 12.846, speechEnd: 13.458 }; // the anticipation, the small punch (beat 30), the last word ends
 // the CTA column and the logo (frame px at rest, before the push-in)
 export const CTA = {
-  dej: { y: 935, w: 290 },
-  follow: { y: 1105, w: 500 }, // FOLLOW <= 560 px even after the slow push (1.053 x) and the breathing
-  pro: { y: 1270, w: 560 },
+  dej: { y: 870, w: 390 },
+  follow: { y: 1075, w: 640 }, // FOLLOW <= 560 px even after the slow push (1.053 x) and the breathing
+  pro: { y: 1280, w: 640 },
   logoY: 560,
   mark: { x: 352, w: 170 },
   word: { x: 632, w: 330 }, // the AI LAB wordmark
@@ -177,7 +177,7 @@ export function buildCta(M: Media, SR: Record<Key, Src>): World {
       const a = t - t0;
       w.g.visible = a >= 0;
       if (!w.g.visible) continue;
-      const slam = lerp(1.25, 1, outBack(clamp(a / (8 / 60)), 1.2));
+      const slam = lerp(1.08, 1, outBack(clamp(a / (8 / 60)), 1.2));
       const [x, yy, ww] = at(540 + 10 * Math.sin(t * 1.1 + y), y, wpx * slam * (1 + punch(S.follow, 0.03)));
       place(w.g, base, x, yy, ww, w.w, D, [0.12 + 0.04 * Math.sin(t * 1.5), -0.16 * Math.sin(t * 1.3 + y * 0.01), 0]);
     }
@@ -188,7 +188,7 @@ export function buildCta(M: Media, SR: Record<Key, Src>): World {
       labGlow.visible = a >= 0;
       if (lab.g.visible) {
         const fly = outCubic(clamp(a / (5 / 60)));
-        const slam1 = lerp(1.3, 1, outBack(clamp((a - 4 / 60) / (8 / 60)), 1.2));
+        const slam1 = lerp(1.1, 1, outBack(clamp((a - 4 / 60) / (8 / 60)), 1.2));
         const [x0, y0] = at(540, CTA.follow.y - 170, 0);
         const [x1, y1] = at(540, CTA.follow.y + 6 * Math.sin(t * 2.1), 0);
         const wpx = CTA.follow.w * Z * lerp(0.3, 1, fly) * slam1 * (1 + beat + punch(C.ctaPunch, 0.03));
@@ -248,7 +248,7 @@ export function buildCta(M: Media, SR: Record<Key, Src>): World {
       orb.visible = t >= S.dej && t < S.lockup + 0.3;
       if (orb.visible) {
         const bu = clamp((t - S.lockup) / 0.3);
-        const [ox, oy, ow] = at(540, 520, 1000 * (1 + 2.2 * outCubic(bu)) * lerp(0.6, 1, outBack(clamp((t - S.dej) / 0.2), 1.2)));
+        const [ox, oy, ow] = at(540, 520, 1600 * (1 + 2.2 * outCubic(bu)) * lerp(0.6, 1, outBack(clamp((t - S.dej) / 0.2), 1.2)));
         place(orb, base, ox, oy, ow, 1, D, [0.35, 0, 0.08 * Math.sin(t)]);
         cards.forEach((c, i) => {
           const th = (i / 10) * Math.PI * 2 + t * 1.1;
